@@ -1,5 +1,5 @@
 const dbManager = require('./index');
-const { sequelize } = require('../models');
+const { initializeModels } = require('../models');
 
 async function runMigrations() {
   try {
@@ -8,8 +8,12 @@ async function runMigrations() {
     // Initialize database connections
     await dbManager.initializeAll();
     
+    // Get default connection and initialize models
+    const sequelize = dbManager.getConnection('default');
+    const models = initializeModels(sequelize);
+    
     // Sync all models (creates tables)
-    await dbManager.syncModels({ force: false });
+    await sequelize.sync({ force: false, alter: true });
     
     console.log('\n✅ Migration completed successfully!');
     console.log('📊 Database: bengkel_pos');
