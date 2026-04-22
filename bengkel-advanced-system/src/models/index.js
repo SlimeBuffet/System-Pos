@@ -1,5 +1,6 @@
 const dbManager = require('../database');
 const config = require('../config');
+const { Sequelize } = require('sequelize');
 
 // Import model factories
 const TenantModel = require('./Tenant');
@@ -17,6 +18,11 @@ const models = {};
 
 // Initialize all models for a given sequelize instance
 function initializeModels(sequelize) {
+  // Check if already initialized
+  if (sequelize && sequelize.models && sequelize.models.Tenant) {
+    return sequelize.models;
+  }
+  
   const models = {
     Tenant: TenantModel(sequelize),
     User: UserModel(sequelize),
@@ -101,8 +107,17 @@ function getModels(tenantId = 'default') {
   return sequelize.models;
 }
 
-// Initialize default connection
-const defaultModels = initializeModels(dbManager.getConnection('default'));
+// Create default sequelize instance if not exists
+let defaultModels;
+try {
+  const defaultConnection = dbManager.getConnection('default');
+  if (defaultConnection) {
+    defaultModels = initializeModels(defaultConnection);
+  }
+} catch (error) {
+  console.log('⚠️  Could not initialize default models (database may not be connected yet)');
+  defaultModels = {};
+}
 
 module.exports = {
   ...defaultModels,
