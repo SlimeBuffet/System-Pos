@@ -57,8 +57,8 @@ module.exports = (sequelize) => {
   return Role;
 };
 
-// Default system roles
-Role.defaultRoles = [
+// Default system roles - defined as a separate export to avoid ReferenceError
+const defaultRoles = [
   {
     name: 'Super Admin',
     slug: 'super_admin',
@@ -162,3 +162,5 @@ Role.defaultRoles = [
     hierarchy_level: 50
   }
 ];
+
+module.exports.defaultRoles = defaultRoles;

@@ -127,8 +127,8 @@ module.exports = (sequelize) => {
   return Account;
 };
 
-// Default Chart of Accounts for Indonesian bengkel
-Account.defaultAccounts = [
+// Default Chart of Accounts for Indonesian bengkel - defined as separate export
+const defaultAccounts = [
   // ASSETS (1-)
   { code: '1-1000', name: 'Kas dan Setara Kas', account_type: 'asset', account_subtype: 'cash_and_equivalents', normal_balance: 'debit', is_system_account: true },
   { code: '1-1001', name: 'Kas Kecil', account_type: 'asset', account_subtype: 'cash_and_equivalents', parent_code: '1-1000', normal_balance: 'debit', is_system_account: true },
@@ -176,3 +176,5 @@ Account.defaultAccounts = [
   { code: '6-1600', name: 'Beban Penyusutan', account_type: 'expense', account_subtype: 'operating_expense', normal_balance: 'debit' },
   { code: '6-1900', name: 'Beban Lain-lain', account_type: 'expense', account_subtype: 'other_expense', normal_balance: 'debit' }
 ];
+
+module.exports.defaultAccounts = defaultAccounts;
