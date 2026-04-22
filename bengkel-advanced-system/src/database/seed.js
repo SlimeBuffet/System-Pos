@@ -14,13 +14,18 @@ async function runSeed() {
 
     // Create default tenant if not exists
     console.log('📋 Creating default tenant...');
+    const defaultTenantId = '550e8400-e29b-41d4-a716-446655440000'; // Fixed UUID for default
     const [tenant, created] = await Tenant.findOrCreate({
-      where: { id: 'default' },
+      where: { id: defaultTenantId },
       defaults: {
+        id: defaultTenantId,
         name: 'Default Bengkel',
-        code: 'DEFAULT',
+        slug: 'default-bengkel',
+        business_name: 'Default Bengkel Workshop',
+        email: 'admin@bengkel.com',
+        phone: '021-1234567',
         active: true,
-        config: {
+        settings: {
           currency: 'IDR',
           timezone: 'Asia/Jakarta',
           taxRate: 11
@@ -31,26 +36,31 @@ async function runSeed() {
 
     // Create roles
     console.log('\n👥 Creating roles...');
-    const roles = [
-      { name: 'Super Admin', code: 'SUPER_ADMIN', level: 100 },
-      { name: 'Admin', code: 'ADMIN', level: 90 },
-      { name: 'Manager', code: 'MANAGER', level: 80 },
-      { name: 'Kasir', code: 'CASHIER', level: 50 },
-      { name: 'Mekanik', code: 'MECHANIC', level: 30 },
-      { name: 'Viewer', code: 'VIEWER', level: 10 }
+    const roleDataList = [
+      { name: 'Super Admin', slug: 'super_admin', level: 100 },
+      { name: 'Admin', slug: 'admin', level: 90 },
+      { name: 'Manager', slug: 'manager', level: 80 },
+      { name: 'Kasir', slug: 'cashier', level: 50 },
+      { name: 'Mekanik', slug: 'mechanic', level: 30 },
+      { name: 'Viewer', slug: 'viewer', level: 10 }
     ];
 
-    for (const roleData of roles) {
+    for (const roleData of roleDataList) {
       const [role, created] = await Role.findOrCreate({
-        where: { tenant_id: tenant.id, code: roleData.code },
+        where: { tenant_id: tenant.id, slug: roleData.slug },
         defaults: {
           ...roleData,
           tenant_id: tenant.id,
-          permissions: getDefaultPermissions(roleData.code)
+          permissions: getDefaultPermissions(roleData.slug),
+          is_system_role: true,
+          hierarchy_level: roleData.level
         }
       });
       console.log(created ? `✅ Created role: ${role.name}` : `✓ Role exists: ${role.name}`);
     }
+
+    // Get Super Admin role
+    const superAdminRole = await Role.findOne({ where: { slug: 'super_admin', tenant_id: tenant.id } });
 
     // Create default admin user
     console.log('\n👤 Creating admin user...');
@@ -59,11 +69,13 @@ async function runSeed() {
       where: { email: 'admin@bengkel.com' },
       defaults: {
         tenant_id: tenant.id,
-        name: 'Administrator',
+        full_name: 'Administrator',
+        username: 'admin',
         email: 'admin@bengkel.com',
         password: hashedPassword,
-        role_id: (await Role.findOne({ where: { code: 'SUPER_ADMIN', tenant_id: tenant.id } })).id,
-        active: true
+        role_id: superAdminRole ? superAdminRole.id : null,
+        active: true,
+        status: 'active'
       }
     });
     console.log(adminCreated ? '✅ Created admin user' : '✓ Admin user exists');
@@ -73,11 +85,10 @@ async function runSeed() {
     // Create default outlet
     console.log('\n🏪 Creating default outlet...');
     const [outlet, outletCreated] = await Outlet.findOrCreate({
-      where: { tenant_id: tenant.id, code: 'MAIN' },
+      where: { tenant_id: tenant.id, name: 'Main Workshop' },
       defaults: {
         tenant_id: tenant.id,
         name: 'Main Workshop',
-        code: 'MAIN',
         address: 'Jl. Raya Utama No. 1',
         phone: '021-1234567',
         active: true
@@ -105,9 +116,9 @@ async function runSeed() {
   }
 }
 
-function getDefaultPermissions(roleCode) {
+function getDefaultPermissions(roleSlug) {
   const permissions = {
-    SUPER_ADMIN: {
+    super_admin: {
       dashboard: 'full',
       work_orders: 'full',
       transactions: 'full',
@@ -122,7 +133,7 @@ function getDefaultPermissions(roleCode) {
       can_delete: true,
       can_export: true
     },
-    ADMIN: {
+    admin: {
       dashboard: 'full',
       work_orders: 'full',
       transactions: 'full',
@@ -137,7 +148,7 @@ function getDefaultPermissions(roleCode) {
       can_delete: true,
       can_export: true
     },
-    MANAGER: {
+    manager: {
       dashboard: 'view',
       work_orders: 'full',
       transactions: 'full',
@@ -152,7 +163,7 @@ function getDefaultPermissions(roleCode) {
       can_delete: false,
       can_export: true
     },
-    CASHIER: {
+    cashier: {
       dashboard: 'view',
       work_orders: 'view',
       transactions: 'full',
@@ -167,7 +178,7 @@ function getDefaultPermissions(roleCode) {
       can_delete: false,
       can_export: false
     },
-    MECHANIC: {
+    mechanic: {
       dashboard: 'view',
       work_orders: 'full',
       transactions: 'none',
@@ -182,7 +193,7 @@ function getDefaultPermissions(roleCode) {
       can_delete: false,
       can_export: false
     },
-    VIEWER: {
+    viewer: {
       dashboard: 'view',
       work_orders: 'view',
       transactions: 'view',
@@ -199,7 +210,7 @@ function getDefaultPermissions(roleCode) {
     }
   };
 
-  return permissions[roleCode] || permissions.VIEWER;
+  return permissions[roleSlug] || permissions.viewer;
 }
 
 async function createChartOfAccounts(tenantId) {

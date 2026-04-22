@@ -9,8 +9,8 @@ const eventSystem = require('./events');
 // Import middleware
 const { authenticate } = require('./middleware/auth');
 
-// Import routes (will be created)
-// const authRoutes = require('./routes/auth');
+// Import routes
+const authRoutes = require('./routes/auth.routes');
 // const tenantRoutes = require('./routes/tenants');
 // const woRoutes = require('./routes/workOrders');
 // const transactionRoutes = require('./routes/transactions');
@@ -79,7 +79,7 @@ class App {
     this.app.use('/api/v1', apiV1);
 
     // Public routes
-    // apiV1.use('/auth', authRoutes);
+    apiV1.use('/auth', authRoutes);
 
     // Protected routes
     // apiV1.use(authenticate);
@@ -219,5 +219,12 @@ class App {
     }
   }
 }
+
+// 🚀 START THE APPLICATION
+const app = new App();
+app.start().catch(err => {
+  console.error('❌ Fatal error starting application:', err);
+  process.exit(1);
+});
 
 module.exports = App;
