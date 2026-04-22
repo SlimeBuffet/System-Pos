@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const dbManager = require('../database');
+const { v4: uuidv4 } = require('uuid');
 
 // Base model factory with multi-tenant support and common fields
 function createBaseModel(sequelize, modelName, attributes) {
@@ -12,7 +13,7 @@ function createBaseModel(sequelize, modelName, attributes) {
     tenant_id: {
       type: DataTypes.UUID,
       allowNull: false,
-      defaultValue: 'default',
+      // Don't auto-generate, will be set by application logic
       field: 'tenant_id'
     },
     created_by: {
@@ -36,11 +37,13 @@ function createBaseModel(sequelize, modelName, attributes) {
     indexes: [
       {
         fields: ['tenant_id'],
-        name: `idx_${modelName.toLowerCase()}_tenant`
+        name: `idx_${modelName.toLowerCase()}_tenant_${Date.now()}`,
+        unique: false
       },
       {
         fields: ['is_deleted'],
-        name: `idx_${modelName.toLowerCase()}_deleted`
+        name: `idx_${modelName.toLowerCase()}_deleted_${Date.now()}`,
+        unique: false
       }
     ],
     defaultScope: {
