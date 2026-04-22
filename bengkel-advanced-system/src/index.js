@@ -226,5 +226,3 @@ app.start().catch(err => {
   console.error('❌ Fatal error starting application:', err);
   process.exit(1);
 });
-
-module.exports = App;

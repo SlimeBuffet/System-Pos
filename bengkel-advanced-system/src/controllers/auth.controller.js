@@ -79,7 +79,7 @@ class AuthController {
       const Role = sequelize.models.Role;
 
       // Find user with role
-      const user = await User.scope('all').findOne({
+      const user = await User.findOne({
         where: { email },
         include: [{ model: Role, as: 'role' }]
       });
