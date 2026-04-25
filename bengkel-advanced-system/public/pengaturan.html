@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengaturan - Bengkel Maju Jaya</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #4F46E5;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --info: #06B6D4;
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: var(--primary);
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .header-title { font-size: 18px; font-weight: 700; }
+    .btn-back { background: rgba(255,255,255,0.2); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; }
+    
+    .main-container { padding: 24px; max-width: 1000px; margin: 0 auto; }
+    
+    /* TABS */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab { padding: 12px 20px; background: var(--bg-white); border: 2px solid #E5E7EB; border-radius: 10px; font-weight: 600; cursor: pointer; color: var(--text-medium); display: flex; align-items: center; gap: 8px; }
+    .tab.active { background: var(--primary); color: var(--text-white); border-color: var(--primary); }
+    
+    /* CONTENT CARD */
+    .content-card { background: var(--bg-white); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    /* SETTING ITEM */
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg-light);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .setting-info { flex: 1; }
+    .setting-label { font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .setting-desc { font-size: 13px; color: var(--text-medium); }
+    .setting-input { padding: 10px 14px; border: 2px solid #E5E7EB; border-radius: 8px; font-size: 14px; font-family: inherit; min-width: 200px; }
+    .setting-input:focus { outline: none; border-color: var(--primary); }
+    .toggle { width: 50px; height: 26px; background: #E5E7EB; border-radius: 13px; position: relative; cursor: pointer; transition: all 0.3s; }
+    .toggle.active { background: var(--success); }
+    .toggle::after { content: ''; position: absolute; width: 22px; height: 22px; background: var(--text-white); border-radius: 50%; top: 2px; left: 2px; transition: all 0.3s; }
+    .toggle.active::after { left: 26px; }
+    
+    /* SAVE BUTTON */
+    .btn-save {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary);
+      color: var(--text-white);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .btn-save:hover { background: #4338CA; }
+    
+    /* LOGO UPLOAD */
+    .logo-upload {
+      width: 120px;
+      height: 120px;
+      background: var(--bg-light);
+      border: 3px dashed #E5E7EB;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer;
+      color: var(--text-light);
+    }
+    
+    .logo-upload:hover { border-color: var(--primary); }
+    .logo-upload i { font-size: 36px; margin-bottom: 8px; }
+    .logo-upload span { font-size: 12px; }
+    
+    .header-logo { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
+    
+    /* SELECT */
+    .setting-select { padding: 10px 14px; border: 2px solid #E5E7EB; border-radius: 8px; font-size: 14px; font-family: inherit; min-width: 200px; background: var(--bg-white); }
+    
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon"><i class="fas fa-cog"></i></div>
+      <div><div class="header-title">⚙️ Pengaturan Sistem</div></div>
+    </div>
+    <a href="dashboard.html" class="btn-back"><i class="fas fa-home"></i> Dashboard</a>
+  </header>
+  
+  <main class="main-container">
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active"><i class="fas fa-store"></i> Toko</button>
+      <button class="tab"><i class="fas fa-percent"></i> Pajak</button>
+      <button class="tab"><i class="fas fa-bell"></i> Notifikasi</button>
+      <button class="tab"><i class="fas fa-print"></i> Cetak</button>
+      <button class="tab"><i class="fas fa-database"></i> Data</button>
+    </div>
+    
+    <!-- PENGATURAN TOKO -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-store"></i> Informasi Toko</h2>
+      
+      <div class="header-logo">
+        <div class="logo-upload">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <span>Upload Logo</span>
+        </div>
+        <div style="flex:1;">
+          <div class="setting-item" style="margin:0;">
+            <div class="setting-info">
+              <div class="setting-label">Nama Bengkel</div>
+              <div class="setting-desc">Nama yang akan tampil di nota</div>
+            </div>
+            <input type="text" class="setting-input" value="Bengkel Maju Jaya">
+          </div>
+        </div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Alamat</div>
+          <div class="setting-desc">Alamat lengkap bengkel</div>
+        </div>
+        <input type="text" class="setting-input" value="Jl. Merdeka No. 45, Jakarta" style="min-width:300px;">
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Nomor Telepon</div>
+          <div class="setting-desc">Nomor yang bisa dihubungi</div>
+        </div>
+        <input type="text" class="setting-input" value="021-1234567" style="min-width:150px;">
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Mode Multi-Tenant</div>
+          <div class="setting-desc">Aktifkan untuk banyak cabang</div>
+        </div>
+        <div class="toggle" onclick="this.classList.toggle('active')"></div>
+      </div>
+    </div>
+    
+    <!-- PAJAK -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-percent"></i> Pengaturan Pajak</h2>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Pajak PPN (%)</div>
+          <div class="setting-desc">Persentase pajak pertambahan nilai</div>
+        </div>
+        <input type="number" class="setting-input" value="11" style="min-width:80px;">
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Pajak Service (%)</div>
+          <div class="setting-desc">Pajak untuk jasa service</div>
+        </div>
+        <input type="number" class="setting-input" value="0" style="min-width:80px;">
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Termasuk Pajak</div>
+          <div class="setting-desc">Harga sudah termasuk pajak</div>
+        </div>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+    </div>
+    
+    <!-- NOTIFIKASI -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-bell"></i> Pengaturan Notifikasi</h2>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">WhatsApp Gateway</div>
+          <div class="setting-desc">Kirim notifikasi via WhatsApp</div>
+        </div>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Notif Service Selesai</div>
+          <div class="setting-desc">Kirim WA saat service selesai</div>
+        </div>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Notif Ambil Mobil</div>
+          <div class="setting-desc">Kirim WA saat mobil siap diambil</div>
+        </div>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Alert Stok Menipis</div>
+          <div class="setting-desc">Peringatan saat stok habis</div>
+        </div>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+    </div>
+    
+    <!-- CETAK -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-print"></i> Pengaturan Cetak</h2>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Footer Nota</div>
+          <div class="setting-desc">Teks di bawah nota</div>
+        </div>
+        <input type="text" class="setting-input" value="Terima kasih atas kepercayaan Anda" style="min-width:300px;">
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Tampilkan Logo di Nota</div>
+          <div class="setting-desc">Cetak logo di header nota</div>
+        </div>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Cetak QR Code</div>
+          <div class="setting-desc">Sertakan QR code di nota</div>
+        </div>
+        <div class="toggle" onclick="this.classList.toggle('active')"></div>
+      </div>
+    </div>
+    
+    <!-- DATA -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-database"></i> Kelola Data</h2>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Backup Data</div>
+          <div class="setting-desc">Download semua data</div>
+        </div>
+        <button class="btn-save" style="width:auto;padding:10px 20px;margin:0;background:var(--success);" onclick="alert('Download data...')">
+          <i class="fas fa-download"></i> Download
+        </button>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Reset Demo Data</div>
+          <div class="setting-desc">Hapus semua data dan mulai ulang</div>
+        </div>
+        <button class="btn-save" style="width:auto;padding:10px 20px;margin:0;background:var(--danger);" onclick="if(confirm('Yakin reset semua data?')) alert('Data direset!')">
+          <i class="fas fa-trash"></i> Reset
+        </button>
+      </div>
+    </div>
+    
+    <!-- SAVE -->
+    <button class="btn-save" onclick="alert('Pengaturan disimpan!')">
+      <i class="fas fa-save"></i> Simpan Semua Pengaturan
+    </button>
+  </main>
+</body>
+</html>

@@ -159,44 +159,44 @@ function checkFieldPermission(modelName, field, action = 'read') {
 }
 
 // Data scope filter - applies data isolation
-function applyDataScope(query, modelName) {
+function applyDataScope(req, modelName) {
   const user = req.currentUser;
-  if (!user) return query;
+  if (!user) return {};
 
   const role = user.role;
-  const dataScope = role.data_scope || { type: 'own_outlet' };
+  const dataScope = role?.data_scope || { type: 'own_outlet' };
+  let query = { tenant_id: user.tenant_id };
 
   switch (dataScope.type) {
     case 'all':
-      // No filter needed
+      // No filter needed - remove tenant filter for super admin
+      delete query.tenant_id;
       break;
     
     case 'own_outlet':
-      query.where = query.where || {};
-      query.where.outlet_id = user.outlet_id;
+      query.outlet_id = user.outlet_id;
       break;
     
     case 'own_records':
-      query.where = query.where || {};
-      query.where.created_by = user.id;
+      query.created_by = user.id;
       break;
     
     case 'assigned_records':
-      query.where = query.where || {};
       // Custom logic for assigned records
       break;
     
     case 'custom':
       // Apply custom scope rules
       if (dataScope.rules && dataScope.rules[modelName]) {
-        query.where = { ...query.where, ...dataScope.rules[modelName] };
+        query = { ...query, ...dataScope.rules[modelName] };
       }
       break;
   }
 
-  // Always filter by tenant
-  query.where = query.where || {};
-  query.where.tenant_id = user.tenant_id;
+  // Always filter by tenant (except for super admin)
+  if (!role?.slug || role.slug !== 'super_admin') {
+    query.tenant_id = user.tenant_id;
+  }
 
   return query;
 }

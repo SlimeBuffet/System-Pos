@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accounting - Bengkel Maju Jaya</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #0891B2;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: var(--primary);
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .header-title { font-size: 18px; font-weight: 700; }
+    .btn-back { background: rgba(255,255,255,0.2); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; }
+    
+    .main-container { padding: 24px; max-width: 1400px; margin: 0 auto; }
+    
+    /* DATE SELECTOR */
+    .date-selector { display: flex; gap: 12px; margin-bottom: 24px; align-items: center; }
+    .date-label { font-weight: 700; color: var(--text-dark); }
+    .date-picker { padding: 10px 16px; border: 2px solid #E5E7EB; border-radius: 10px; font-size: 14px; font-family: inherit; }
+    .btn-refresh { background: var(--primary); color: var(--text-white); border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    
+    /* SUMMARY CARDS */
+    .summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .summary-card { background: var(--bg-white); padding: 24px; border-radius: 16px; box-shadow: var(--shadow); }
+    .summary-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 12px; }
+    .summary-value { font-size: 28px; font-weight: 800; }
+    .summary-label { font-size: 14px; color: var(--text-medium); }
+    .income .summary-value { color: var(--success); }
+    .expense .summary-value { color: var(--danger); }
+    
+    /* TABS */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab { padding: 12px 24px; background: var(--bg-white); border: 2px solid #E5E7EB; border-radius: 10px; font-weight: 600; cursor: pointer; color: var(--text-medium); }
+    .tab.active { background: var(--primary); color: var(--text-white); border-color: var(--primary); }
+    
+    /* CONTENT CARD */
+    .content-card { background: var(--bg-white); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px; background: var(--bg-light); font-size: 13px; font-weight: 700; color: var(--text-medium); }
+    td { padding: 12px; border-bottom: 1px solid #E5E7EB; font-size: 14px; }
+    .amount { text-align: right; font-family: monospace; font-size: 14px; }
+    .amount-debit { color: var(--danger); }
+    .amount-kredit { color: var(--success); }
+    .account-code { font-family: monospace; color: var(--text-medium); font-size: 13px; }
+    .account-name { font-weight: 600; }
+    .total-row { background: var(--bg-light); font-weight: 700; }
+    .total-row td { border-bottom: none; padding: 14px 12px; }
+    
+    /* BALANCE SHEET */
+    .balance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .balance-section { padding: 20px; background: var(--bg-light); border-radius: 12px; }
+    .balance-title { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid; }
+    .balance-section.assets .balance-title { border-color: #3B82F6; }
+    .balance-section.liabilities .balance-title { border-color: #EF4444; }
+    .balance-section.equity .balance-title { border-color: #10B981; }
+    
+    .balance-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #E5E7EB; font-size: 14px; }
+    .balance-item.total { border-bottom: none; border-top: 2px solid; font-weight: 700; }
+    .balance-section.assets .balance-item.total { border-color: #3B82F6; }
+    .balance-section.liabilities .balance-item.total { border-color: #EF4444; }
+    .balance-section.equity .balance-item.total { border-color: #10B981; }
+    
+    .balance-value { font-weight: 600; }
+    
+    @media (max-width: 900px) {
+      .summary-row { grid-template-columns: repeat(2, 1fr); }
+      .balance-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon"><i class="fas fa-book"></i></div>
+      <div><div class="header-title">💰 Accounting - Keuangan</div></div>
+    </div>
+    <a href="dashboard.html" class="btn-back"><i class="fas fa-home"></i> Dashboard</a>
+  </header>
+  
+  <main class="main-container">
+    <!-- DATE SELECTOR -->
+    <div class="date-selector">
+      <span class="date-label">📅 Periode:</span>
+      <input type="date" class="date-picker" value="2026-04-25">
+      <span>s/d</span>
+      <input type="date" class="date-picker" value="2026-04-25">
+      <button class="btn-refresh"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+    
+    <!-- SUMMARY -->
+    <div class="summary-row">
+      <div class="summary-card income">
+        <div class="summary-icon" style="background:#D1FAE5;color:#059669;">
+          <i class="fas fa-arrow-up"></i>
+        </div>
+        <div class="summary-value">Rp 4.850.000</div>
+        <div class="summary-label">Pemasukan Bulan Ini</div>
+      </div>
+      <div class="summary-card expense">
+        <div class="summary-icon" style="background:#FEE2E2;color:#DC2626;">
+          <i class="fas fa-arrow-down"></i>
+        </div>
+        <div class="summary-value">Rp 2.150.000</div>
+        <div class="summary-label">Pengeluaran Bulan Ini</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon" style="background:#D1FAE5;color:#059669;">
+          <i class="fas fa-wallet"></i>
+        </div>
+        <div class="summary-value">Rp 12.450.000</div>
+        <div class="summary-label">Saldo Cash</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon" style="background:#DBEAFE;color:#2563EB;">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="summary-value">Rp 2.700.000</div>
+        <div class="summary-label">Laba Bersih</div>
+      </div>
+    </div>
+    
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active">📓 Jurnal Umum</button>
+      <button class="tab">📊 Neraca</button>
+      <button class="tab">📈 Laba Rugi</button>
+      <button class="tab">💵 Arus Kas</button>
+    </div>
+    
+    <!-- JURNAL UMUM -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-book"></i> Jurnal Umum - 25 April 2026</h2>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>No. Bukti</th>
+            <th>Kode Akun</th>
+            <th>Nama Akun</th>
+            <th>Debit</th>
+            <th>Kredit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>25/04</td>
+            <td>JUAL-001</td>
+            <td class="account-code">1101</td>
+            <td class="account-name">Kas</td>
+            <td class="amount amount-debit">Rp 235.000</td>
+            <td class="amount">-</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="account-code">4101</td>
+            <td class="account-name">Pendapatan Service</td>
+            <td class="amount">-</td>
+            <td class="amount amount-kredit">Rp 150.000</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="account-code">4102</td>
+            <td class="account-name">Pendapatan Sparepart</td>
+            <td class="amount">-</td>
+            <td class="amount amount-kredit">Rp 85.000</td>
+          </tr>
+          <tr>
+            <td>25/04</td>
+            <td>Beli-001</td>
+            <td class="account-code">5101</td>
+            <td class="account-name">Pembelian Sparepart</td>
+            <td class="amount amount-debit">Rp 500.000</td>
+            <td class="amount">-</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="account-code">1101</td>
+            <td class="account-name">Kas</td>
+            <td class="amount">-</td>
+            <td class="amount amount-kredit">Rp 500.000</td>
+          </tr>
+          <tr>
+            <td>25/04</td>
+            <td>JUAL-002</td>
+            <td class="account-code">1101</td>
+            <td class="account-name">Kas</td>
+            <td class="amount amount-debit">Rp 450.000</td>
+            <td class="amount">-</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="account-code">4101</td>
+            <td class="account-name">Pendapatan Service</td>
+            <td class="amount">-</td>
+            <td class="amount amount-kredit">Rp 350.000</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="account-code">4102</td>
+            <td class="account-name">Pendapatan Sparepart</td>
+            <td class="amount">-</td>
+            <td class="amount amount-kredit">Rp 100.000</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="4">TOTAL</td>
+            <td class="amount amount-debit">Rp 1.185.000</td>
+            <td class="amount amount-kredit">Rp 1.185.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- NERACA -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-balance-scale"></i> Neraca - 25 April 2026</h2>
+      
+      <div class="balance-grid">
+        <!-- AKTIVA -->
+        <div class="balance-section assets">
+          <h3 class="balance-title">💵 AKTIVA</h3>
+          <div class="balance-item">
+            <span>Kas & Bank</span>
+            <span class="balance-value">Rp 12.450.000</span>
+          </div>
+          <div class="balance-item">
+            <span>Piutang Usaha</span>
+            <span class="balance-value">Rp 2.500.000</span>
+          </div>
+          <div class="balance-item">
+            <span>Persediaan Sparepart</span>
+            <span class="balance-value">Rp 8.750.000</span>
+          </div>
+          <div class="balance-item">
+            <span>Aktiva Tetap ( Neto)</span>
+            <span class="balance-value">Rp 15.000.000</span>
+          </div>
+          <div class="balance-item total">
+            <span>TOTAL AKTIVA</span>
+            <span class="balance-value">Rp 38.700.000</span>
+          </div>
+        </div>
+        
+        <!-- KEWAJIBAN & EKUITAS -->
+        <div>
+          <div class="balance-section liabilities" style="margin-bottom:16px;">
+            <h3 class="balance-title">📋 KEWAJIBAN</h3>
+            <div class="balance-item">
+              <span>Hutang Usaha</span>
+              <span class="balance-value">Rp 3.200.000</span>
+            </div>
+            <div class="balance-item">
+              <span>Hutang Bank</span>
+              <span class="balance-value">Rp 5.000.000</span>
+            </div>
+            <div class="balance-item total">
+              <span>TOTAL KEWAJIBAN</span>
+              <span class="balance-value">Rp 8.200.000</span>
+            </div>
+          </div>
+          
+          <div class="balance-section equity">
+            <h3 class="balance-title">📊 EKUITAS</h3>
+            <div class="balance-item">
+              <span>Modal Usaha</span>
+              <span class="balance-value">Rp 20.000.000</span>
+            </div>
+            <div class="balance-item">
+              <span>Laba Ditahan</span>
+              <span class="balance-value">Rp 7.800.000</span>
+            </div>
+            <div class="balance-item">
+              <span>Laba Bulan Ini</span>
+              <span class="balance-value">Rp 2.700.000</span>
+            </div>
+            <div class="balance-item total">
+              <span>TOTAL EKUITAS</span>
+              <span class="balance-value">Rp 30.500.000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- LABA RUGI -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-chart-line"></i> Laba Rugi - April 2026</h2>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Akun</th>
+            <th>Bulan Ini</th>
+            <th>Total Tahun</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="account-code">4101</td>
+            <td>Pendapatan Service</td>
+            <td class="amount">Rp 3.200.000</td>
+            <td class="amount">Rp 12.800.000</td>
+          </tr>
+          <tr>
+            <td class="account-code">4102</td>
+            <td>Pendapatan Sparepart</td>
+            <td class="amount">Rp 1.650.000</td>
+            <td class="amount">Rp 6.600.000</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="2">TOTAL PENDAPATAN</td>
+            <td class="amount amount-kredit">Rp 4.850.000</td>
+            <td class="amount amount-kredit">Rp 19.400.000</td>
+          </tr>
+          <tr><td colspan="4"></td></tr>
+          <tr>
+            <td class="account-code">5101</td>
+            <td>Biaya Sparepart Terjual</td>
+            <td class="amount amount-debit">Rp 850.000</td>
+            <td class="amount amount-debit">Rp 3.400.000</td>
+          </tr>
+          <tr>
+            <td class="account-code">5201</td>
+            <td>Biaya Gaji Montir</td>
+            <td class="amount amount-debit">Rp 800.000</td>
+            <td class="amount amount-debit">Rp 3.200.000</td>
+          </tr>
+          <tr>
+            <td class="account-code">5202</td>
+            <td>Biaya Operasional</td>
+            <td class="amount amount-debit">Rp 300.000</td>
+            <td class="amount amount-debit">Rp 1.200.000</td>
+          </tr>
+          <tr>
+            <td class="account-code">5203</td>
+            <td>Biaya Listrik & Air</td>
+            <td class="amount amount-debit">Rp 150.000</td>
+            <td class="amount amount-debit">Rp 600.000</td>
+          </tr>
+          <tr>
+            <td class="account-code">5204</td>
+            <td>Biaya ATT & STNK</td>
+            <td class="amount amount-debit">Rp 50.000</td>
+            <td class="amount amount-debit">Rp 200.000</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="2">TOTAL BIAYA</td>
+            <td class="amount amount-debit">Rp 2.150.000</td>
+            <td class="amount amount-debit">Rp 8.600.000</td>
+          </tr>
+          <tr><td colspan="4"></td></tr>
+          <tr style="background:#D1FAE5;font-weight:700;font-size:16px;">
+            <td colspan="2">💰 LABA BERSIH</td>
+            <td class="amount">Rp 2.700.000</td>
+            <td class="amount">Rp 10.800.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>
