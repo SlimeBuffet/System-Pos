@@ -4,7 +4,18 @@ const createBaseModel = require('./base');
 
 // Tenant Model - For multi-tenant architecture
 module.exports = (sequelize) => {
-  const Tenant = createBaseModel(sequelize, 'Tenant', {
+  const Tenant = sequelize.define('Tenant', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
+    },
+    // Tenant tidak perlu tenant_id karena dia root entity
+    tenant_id: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null
+    },
     name: {
       type: DataTypes.STRING(255),
       allowNull: false

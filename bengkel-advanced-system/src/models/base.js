@@ -12,8 +12,7 @@ function createBaseModel(sequelize, modelName, attributes) {
     },
     tenant_id: {
       type: DataTypes.UUID,
-      allowNull: false,
-      // Don't auto-generate, will be set by application logic
+      allowNull: true, // Allow null for special cases like Tenant
       field: 'tenant_id'
     },
     created_by: {

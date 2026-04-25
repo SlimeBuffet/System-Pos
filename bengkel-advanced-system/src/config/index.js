@@ -12,7 +12,7 @@ module.exports = {
     port: parseInt(process.env.DB_PORT) || 5432,
     name: process.env.DB_NAME || 'bengkel_pos',
     user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || '',
+    password: String(process.env.DB_PASSWORD || ''),
     dialect: 'postgres',
     pool: {
       max: 10,
