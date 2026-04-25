@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karyawan & Payroll - Bengkel Maju Jaya</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #0891B2;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --info: #06B6D4;
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: var(--success);
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .header-title { font-size: 18px; font-weight: 700; }
+    .btn-back { background: rgba(255,255,255,0.2); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; }
+    .btn-add { background: var(--text-white); color: var(--success); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    
+    .main-container { padding: 24px; max-width: 1200px; margin: 0 auto; }
+    
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-white); padding: 20px; border-radius: 14px; box-shadow: var(--shadow); }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--success); }
+    .stat-label { font-size: 13px; color: var(--text-medium); }
+    
+    /* TABS */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab { padding: 12px 24px; background: var(--bg-white); border: 2px solid #E5E7EB; border-radius: 10px; font-weight: 600; cursor: pointer; color: var(--text-medium); }
+    .tab.active { background: var(--success); color: var(--text-white); border-color: var(--success); }
+    
+    /* CONTENT */
+    .content-card { background: var(--bg-white); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
+    .card-title { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px; background: var(--bg-light); font-size: 13px; font-weight: 700; color: var(--text-medium); }
+    td { padding: 14px 12px; border-bottom: 1px solid #E5E7EB; font-size: 14px; }
+    .employee-name { font-weight: 700; color: var(--text-dark); }
+    .role-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .role-montir { background: #DBEAFE; color: #2563EB; }
+    .role-kasir { background: #FCE7F3; color: #DB2777; }
+    .role-admin { background: #E0E7FF; color: #4F46E5; }
+    .role-manager { background: #D1FAE5; color: #059669; }
+    .status-active { background: #D1FAE5; color: #059669; }
+    .salary { text-align: right; font-weight: 700; }
+    .action-btn { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    .btn-pay { background: #D1FAE5; color: #059669; }
+    .btn-edit { background: #FEF3C7; color: #D97706; }
+    
+    /* PAYSLIP */
+    .payslip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .payslip-card { background: var(--bg-light); padding: 20px; border-radius: 14px; }
+    .payslip-title { font-size: 14px; font-weight: 700; color: var(--text-medium); margin-bottom: 12px; }
+    .payslip-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E5E7EB; }
+    .payslip-item.total { border-top: 2px solid; border-bottom: none; padding-top: 12px; margin-top: 8px; font-weight: 700; }
+    .payslip-card.gaji .payslip-item.total { border-color: var(--success); }
+    .payslip-card.potongan .payslip-item.total { border-color: var(--danger); }
+    .payslip-card.takehome .payslip-item.total { border-color: #2563EB; background: var(--bg-white); padding: 12px; border-radius: 8px; }
+    
+    @media (max-width: 800px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .payslip-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon"><i class="fas fa-users"></i></div>
+      <div><div class="header-title">👨‍🔧 Karyawan & Payroll</div></div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <a href="dashboard.html" class="btn-back"><i class="fas fa-home"></i> Dashboard</a>
+      <button class="btn-add" onclick="alert('Tambah karyawancoming soon!')">
+        <i class="fas fa-plus"></i> Tambah Karyawan
+      </button>
+    </div>
+  </header>
+  
+  <main class="main-container">
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Total Karyawan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Montir</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1</div>
+        <div class="stat-label">Kasir</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1</div>
+        <div class="stat-label">Admin</div>
+      </div>
+    </div>
+    
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active">👥 Daftar Karyawan</button>
+      <button class="tab">💵 Payroll Bulan Ini</button>
+      <button class="tab">📊 Rekap Gaji</button>
+    </div>
+    
+    <!-- DAFTAR KARYAWAN -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-user-hard-hat"></i> Daftar Karyawan</h2>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Posisi</th>
+            <th>Telepon</th>
+            <th>Tanggal Masuk</th>
+            <th>Gaji Pokok</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>
+              <div class="employee-name">Budi Santoso</div>
+            </td>
+            <td><span class="role-badge role-montir">Montir</span></td>
+            <td>0812 3456 7890</td>
+            <td>Jan 2022</td>
+            <td class="salary">Rp 3.500.000</td>
+            <td><span class="role-badge role-montir">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-pay">Bayar Gaji</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>
+              <div class="employee-name">Agus Setiawan</div>
+            </td>
+            <td><span class="role-badge role-montir">Montir</span></td>
+            <td>0813 9876 5432</td>
+            <td>Mar 2022</td>
+            <td class="salary">Rp 3.500.000</td>
+            <td><span class="role-badge role-montir">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-pay">Bayar Gaji</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>
+              <div class="employee-name">Rudi Hermawan</div>
+            </td>
+            <td><span class="role-badge role-montir">Montir</span></td>
+            <td>0821 1122 3344</td>
+            <td>Jun 2023</td>
+            <td class="salary">Rp 3.000.000</td>
+            <td><span class="role-badge role-montir">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-pay">Bayar Gaji</button>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>
+              <div class="employee-name">Siti Rahayu</div>
+            </td>
+            <td><span class="role-badge role-kasir">Kasir</span></td>
+            <td>0856 7788 9900</td>
+            <td>Feb 2023</td>
+            <td class="salary">Rp 2.800.000</td>
+            <td><span class="role-badge role-kasir">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-pay">Bayar Gaji</button>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>
+              <div class="employee-name">Ahmad Wijaya</div>
+            </td>
+            <td><span class="role-badge role-admin">Admin</span></td>
+            <td>0878 9900 1122</td>
+            <td>Jan 2024</td>
+            <td class="salary">Rp 2.500.000</td>
+            <td><span class="role-badge role-admin">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-pay">Bayar Gaji</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- PAYSLIP CONTOH -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Slip Gaji - Contoh (Budi Santoso)</h2>
+      
+      <div class="payslip-grid">
+        <!-- PENGHASILAN -->
+        <div class="payslip-card">
+          <div class="payslip-title">💰 PENGHASILAN</div>
+          <div class="payslip-item">
+            <span>Gaji Pokok</span>
+            <span>Rp 3.500.000</span>
+          </div>
+          <div class="payslip-item">
+            <span>Bonus Service (+3)</span>
+            <span>Rp 300.000</span>
+          </div>
+          <div class="payslip-item">
+            <span>Insentif</span>
+            <span>Rp 200.000</span>
+          </div>
+          <div class="payslip-item total">
+            <span>TOTAL</span>
+            <span>Rp 4.000.000</span>
+          </div>
+        </div>
+        
+        <!-- POTONGAN -->
+        <div class="payslip-card potongan">
+          <div class="payslip-title">📉 POTONGAN</div>
+          <div class="payslip-item">
+            <span>BPJS Kesehatan</span>
+            <span>Rp 35.000</span>
+          </div>
+          <div class="payslip-item">
+            <span>BPJS TK</span>
+            <span>Rp 38.500</span>
+          </div>
+          <div class="payslip-item">
+            <span>PPh 21</span>
+            <span>Rp 26.500</span>
+          </div>
+          <div class="payslip-item total">
+            <span>TOTAL</span>
+            <span>Rp 100.000</span>
+          </div>
+        </div>
+        
+        <!-- TAKE HOME PAY -->
+        <div class="payslip-card takehome">
+          <div class="payslip-title">💵 TAKE HOME PAY</div>
+          <div class="payslip-item">
+            <span><strong>Gaji Bersih</strong></span>
+            <span><strong>Rp 3.900.000</strong></span>
+          </div>
+          <div class="payslip-item total" style="background:var(--success);color:white;">
+            <span>DIBAYARKAN</span>
+            <span>Rp 3.900.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- REKAP BULANAN -->
+    <div class="content-card">
+      <h2 class="card-title"><i class="fas fa-calendar"></i> Rekap Gaji Bulan April 2026</h2>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Posisi</th>
+            <th>Gaji Pokok</th>
+            <th>Bonus</th>
+            <th>Potongan</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="employee-name">Budi Santoso</td>
+            <td>Montir</td>
+            <td class="salary">Rp 3.500.000</td>
+            <td class="salary">Rp 300.000</td>
+            <td class="salary">-Rp 100.000</td>
+            <td class="salary">Rp 3.700.000</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="employee-name">Agus Setiawan</td>
+            <td>Montir</td>
+            <td class="salary">Rp 3.500.000</td>
+            <td class="salary">Rp 250.000</td>
+            <td class="salary">-Rp 100.000</td>
+            <td class="salary">Rp 3.650.000</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="employee-name">Rudi Hermawan</td>
+            <td>Montir</td>
+            <td class="salary">Rp 3.000.000</td>
+            <td class="salary">Rp 200.000</td>
+            <td class="salary">-Rp 75.000</td>
+            <td class="salary">Rp 3.125.000</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="employee-name">Siti Rahayu</td>
+            <td>Kasir</td>
+            <td class="salary">Rp 2.800.000</td>
+            <td class="salary">Rp 100.000</td>
+            <td class="salary">-Rp 70.000</td>
+            <td class="salary">Rp 2.830.000</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="employee-name">Ahmad Wijaya</td>
+            <td>Admin</td>
+            <td class="salary">Rp 2.500.000</td>
+            <td class="salary">Rp 50.000</td>
+            <td class="salary">-Rp 55.000</td>
+            <td class="salary">Rp 2.495.000</td>
+          </tr>
+          <tr class="total-row" style="background:var(--bg-light);font-weight:700;">
+            <td colspan="3">TOTAL BIAYA GAJI</td>
+            <td class="salary">Rp 15.300.000</td>
+            <td class="salary">Rp 900.000</td>
+            <td class="salary">-Rp 400.000</td>
+            <td class="salary">Rp 15.800.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

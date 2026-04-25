@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terima Mobil - Bengkel Maju Jaya</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --success: #10B981;
+      --success-light: #D1FAE5;
+      --warning: #F59E0B;
+      --warning-light: #FEF3C7;
+      --danger: #EF4444;
+      --danger-light: #FEE2E2;
+      --info: #06B6D4;
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    /* HEADER */
+    .header {
+      background: var(--success);
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    
+    .header-title { font-size: 18px; font-weight: 700; }
+    
+    .btn-back {
+      background: rgba(255,255,255,0.2);
+      color: var(--text-white);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-back:hover { background: rgba(255,255,255,0.3); }
+    
+    /* MAIN */
+    .main-container {
+      padding: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    /* FORM CARD */
+    .form-card {
+      background: var(--bg-white);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .form-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .form-subtitle {
+      color: var(--text-medium);
+      margin-bottom: 28px;
+      font-size: 15px;
+    }
+    
+    .form-group { margin-bottom: 20px; }
+    
+    .form-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 16px 18px;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--success);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 16px 18px;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      background: var(--bg-white);
+      cursor: pointer;
+    }
+    
+    .form-select:focus {
+      outline: none;
+      border-color: var(--success);
+    }
+    
+    /* SERVICE CHECKBOXES */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .service-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      background: var(--bg-light);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .service-item:hover { background: var(--success-light); }
+    
+    .service-item.selected {
+      background: var(--success);
+      color: var(--text-white);
+    }
+    
+    .service-checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid currentColor;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    
+    .service-item.selected .service-checkbox {
+      background: var(--text-white);
+      color: var(--success);
+    }
+    
+    .service-name { font-weight: 600; }
+    
+    .service-price {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+    
+    /* NOTES */
+    .form-textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--success);
+    }
+    
+    /* SUBMIT BUTTON */
+    .btn-submit {
+      width: 100%;
+      padding: 18px;
+      background: var(--success);
+      color: var(--text-white);
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 24px;
+      transition: all 0.3s;
+    }
+    
+    .btn-submit:hover {
+      background: #059669;
+      transform: translateY(-2px);
+    }
+    
+    /* SUCCESS MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.show { display: flex; }
+    
+    .modal-content {
+      background: var(--bg-white);
+      padding: 36px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+    }
+    
+    .modal-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success-light);
+      color: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 20px;
+    }
+    
+    .modal-title { font-size: 26px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+    .modal-plate { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 12px; }
+    .modal-info { color: var(--text-medium); margin-bottom: 20px; font-size: 15px; }
+    
+    .modal-btn {
+      padding: 16px 32px;
+      background: var(--success);
+      color: var(--text-white);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .service-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon"><i class="fas fa-car"></i></div>
+      <div><div class="header-title">🔧 Terima Mobil</div></div>
+    </div>
+    <a href="dashboard.html" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+  </header>
+  
+  <!-- MAIN -->
+  <main class="main-container">
+    <div class="form-card">
+      <h1 class="form-title"><i class="fas fa-plus-circle"></i> service Baru</h1>
+      <p class="form-subtitle">Mohon isi data mobil dan layananService dengan lengkap</p>
+      
+      <form id="serviceForm">
+        <!-- PLAT NOMOR -->
+        <div class="form-group">
+          <label class="form-label">🚗 Nomor Plat Mobil *</label>
+          <input type="text" class="form-input" id="plateNumber" placeholder="Contoh: B 1234 ABC" required style="text-transform: uppercase;">
+        </div>
+        
+        <!-- NAMA PEMILIK -->
+        <div class="form-group">
+          <label class="form-label">👤 Nama Pemilik *</label>
+          <input type="text" class="form-input" id="ownerName" placeholder="Nama pemilik mobil" required>
+        </div>
+        
+        <!-- NOMOR TELEPON -->
+        <div class="form-group">
+          <label class="form-label">📱 Nomor Telepon *</label>
+          <input type="tel" class="form-input" id="ownerPhone" placeholder="0812 3456 7890" required>
+        </div>
+        
+        <!-- JENIS MOBIL -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">🚙 Merk Mobil</label>
+            <select class="form-select" id="carMerk">
+              <option value="">Pilih Merk</option>
+              <option value="Toyota">Toyota</option>
+              <option value="Honda">Honda</option>
+              <option value="Mitsubishi">Mitsubishi</option>
+              <option value="Nissan">Nissan</option>
+              <option value="Suzuki">Suzuki</option>
+              <option value="Daihatsu">Daihatsu</option>
+              <option value="Hyundai">Hyundai</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">📅 Tahun Mobil</label>
+            <input type="number" class="form-input" id="carYear" placeholder="2020" min="1990" max="2030">
+          </div>
+        </div>
+        
+        <!-- KILOMETER -->
+        <div class="form-group">
+          <label class="form-label">📊 Kilometer Saat Ini</label>
+          <input type="number" class="form-input" id="carKm" placeholder="Contoh: 50000">
+        </div>
+        
+        <!-- SERVICE YANG DIMINTA -->
+        <div class="form-group">
+          <label class="form-label">🔧 Service yang Diinginkan (bisa pilih lebih dari satu)</label>
+          <div class="service-grid" id="serviceGrid">
+            <div class="service-item" onclick="toggleService(this)">
+              <div class="service-checkbox">✓</div>
+              <div>
+                <div class="service-name">Ganti Oli</div>
+                <div class="service-price">Rp 85.000</div>
+              </div>
+              <input type="hidden" value="Ganti Oli" name="services">
+              <input type="hidden" value="85000" name="prices">
+            </div>
+            
+            <div class="service-item" onclick="toggleService(this)">
+              <div class="service-checkbox">✓</div>
+              <div>
+                <div class="service-name">Tune Up</div>
+                <div class="service-price">Rp 150.000</div>
+              </div>
+              <input type="hidden" value="Tune Up" name="services">
+              <input type="hidden" value="150000" name="prices">
+            </div>
+            
+            <div class="service-item" onclick="toggleService(this)">
+              <div class="service-checkbox">✓</div>
+              <div>
+                <div class="service-name">Ganti Kampas Rem</div>
+                <div class="service-price">Rp 130.000</div>
+              </div>
+              <input type="hidden" value="Ganti Kampas Rem" name="services">
+              <input type="hidden" value="130000" name="prices">
+            </div>
+            
+            <div class="service-item" onclick="toggleService(this)">
+              <div class="service-checkbox">✓</div>
+              <div>
+                <div class="service-name">Cuci Mobil</div>
+                <div class="service-price">Rp 75.000</div>
+              </div>
+              <input type="hidden" value="Cuci Mobil" name="services">
+              <input type="hidden" value="75000" name="prices">
+            </div>
+            
+            <div class="service-item" onclick="toggleService(this)">
+              <div class="service-checkbox">✓</div>
+              <div>
+                <div class="service-name">Service AC</div>
+                <div class="service-price">Rp 200.000</div>
+              </div>
+              <input type="hidden" value="Service AC" name="services">
+              <input type="hidden" value="200000" name="prices">
+            </div>
+            
+            <div class="service-item" onclick="toggleService(this)">
+              <div class="service-checkbox">✓</div>
+              <div>
+                <div class="service-name">Ganti Oli Gardan</div>
+                <div class="service-price">Rp 95.000</div>
+              </div>
+              <input type="hidden" value="Ganti Oli Gardan" name="services">
+              <input type="hidden" value="95000" name="prices">
+            </div>
+          </div>
+        </div>
+        
+        <!-- KELUHAN -->
+        <div class="form-group">
+          <label class="form-label">📝 Keluhan / Catatan</label>
+          <textarea class="form-textarea" id="complaint" placeholder="Tuliskan keluhan atau catatan khusus untuk montir..."></textarea>
+        </div>
+        
+        <!-- ESTIMASI BIAYA -->
+        <div class="form-group">
+          <div style="background: var(--warning-light); padding: 16px; border-radius: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 700; color: var(--text-dark);">💰 Estimasi Biaya:</span>
+              <span style="font-size: 24px; font-weight: 800; color: var(--warning);" id="estimateDisplay">Rp 0</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- SUBMIT -->
+        <button type="submit" class="btn-submit">
+          <i class="fas fa-check"></i> Simpan & Terima Mobil
+        </button>
+      </form>
+    </div>
+  </main>
+  
+  <!-- SUCCESS MODAL -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon"><i class="fas fa-car"></i></div>
+      <h2 class="modal-title">✅ Mobil Diterima!</h2>
+      <div class="modal-plate" id="modalPlate">B 1234 ABC</div>
+      <p class="modal-info">
+        Mobil sudah masuk antrian service.<br>
+        Estimasi selesai: <strong id="modalDuration">2 jam</strong>
+      </p>
+      <button class="modal-btn" onclick="closeModal()">Simpan</button>
+    </div>
+  </div>
+  
+  <script>
+    let selectedServices = [];
+    
+    // Toggle service selection
+    function toggleService(element) {
+      element.classList.toggle('selected');
+      
+      // Update estimate
+      updateEstimate();
+    }
+    
+    // Update estimate display
+    function updateEstimate() {
+      const selected = document.querySelectorAll('.service-item.selected');
+      let total = 0;
+      
+      selected.forEach(item => {
+        const priceInput = item.querySelector('input[name="prices"]');
+        total += parseInt(priceInput.value);
+      });
+      
+      document.getElementById('estimateDisplay').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    }
+    
+    // Form submit
+    document.getElementById('serviceForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const plate = document.getElementById('plateNumber').value.toUpperCase();
+      const owner = document.getElementById('ownerName').value;
+      
+      if (!plate || !owner) {
+        alert('Mohon isi nomor plat dan nama pemilik!');
+        return;
+      }
+      
+      // Show success modal
+      document.getElementById('modalPlate').textContent = plate;
+      document.getElementById('successModal').classList.add('show');
+    });
+    
+    // Close modal
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('show');
+      window.location.href = 'dashboard.html';
+    }
+    
+    // Auto uppercase plate
+    document.getElementById('plateNumber').addEventListener('input', function(e) {
+      e.target.value = e.target.value.toUpperCase();
+    });
+  </script>
+</body>
+</html>
