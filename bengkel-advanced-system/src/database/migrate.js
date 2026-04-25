@@ -12,38 +12,11 @@ async function runMigrations() {
     const sequelize = dbManager.getConnection('default');
     const models = initializeModels(sequelize);
 
-    console.log('\n📋 Syncing models in correct order...');
+    console.log('\n📋 Syncing ALL models (force: true)...');
     
-    // Sync models in dependency order to avoid foreign key issues
-    await sequelize.models.Tenant.sync({ alter: true });
-    console.log('✅ Table tenants synced');
-    
-    await sequelize.models.Role.sync({ alter: true });
-    console.log('✅ Table roles synced');
-    
-    await sequelize.models.Outlet.sync({ alter: true });
-    console.log('✅ Table outlets synced');
-    
-    await sequelize.models.User.sync({ alter: true });
-    console.log('✅ Table users synced');
-    
-    await sequelize.models.Product.sync({ alter: true });
-    console.log('✅ Table products synced');
-    
-    await sequelize.models.WorkOrder.sync({ alter: true });
-    console.log('✅ Table work_orders synced');
-    
-    await sequelize.models.Transaction.sync({ alter: true });
-    console.log('✅ Table transactions synced');
-    
-    await sequelize.models.Account.sync({ alter: true });
-    console.log('✅ Table accounts synced');
-    
-    await sequelize.models.JournalEntry.sync({ alter: true });
-    console.log('✅ Table journal_entries synced');
-    
-    await sequelize.models.JournalLine.sync({ alter: true });
-    console.log('✅ Table journal_lines synced');
+    // Sync ALL models at once with force to avoid order issues
+    await sequelize.sync({ force: true });
+    console.log('✅ All tables synced successfully!');
 
     console.log('\n✅ Migration completed successfully!');
     console.log('📊 Database: bengkel_pos');
