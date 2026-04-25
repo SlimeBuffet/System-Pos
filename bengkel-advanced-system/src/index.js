@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const config = require('./config');
 const dbManager = require('./database');
 const eventSystem = require('./events');
@@ -31,6 +32,9 @@ class App {
   }
 
   initializeMiddleware() {
+    // Serve static files from public folder
+    this.app.use(express.static(path.join(__dirname, '../public')));
+    
     // Security headers
     this.app.use(helmet());
     
@@ -64,6 +68,11 @@ class App {
   }
 
   initializeRoutes() {
+    // Serve login.html as default page
+    this.app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../public/login.html'));
+    });
+    
     // Health check
     this.app.get('/health', (req, res) => {
       res.json({
