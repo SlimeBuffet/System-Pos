@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasir - Bengkel Maju Jaya</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    /* RESET & BASE */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --success: #10B981;
+      --success-light: #D1FAE5;
+      --warning: #F59E0B;
+      --warning-light: #FEF3C7;
+      --danger: #EF4444;
+      --danger-light: #FEE2E2;
+      
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    /* HEADER */
+    .header {
+      background: var(--primary);
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    
+    .btn-back {
+      background: rgba(255,255,255,0.2);
+      color: var(--text-white);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-back:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    /* MAIN LAYOUT */
+    .main-container {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      padding: 24px;
+      max-width: 1600px;
+      margin: 0 auto;
+      min-height: calc(100vh - 80px);
+    }
+    
+    /* LEFT SIDE - PRODUCTS */
+    .products-section {
+      background: var(--bg-white);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* SEARCH BAR */
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .btn-search {
+      background: var(--primary);
+      color: var(--text-white);
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    /* PRODUCTS GRID */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    
+    .product-card {
+      background: var(--bg-light);
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    
+    .product-card:hover {
+      border-color: var(--primary);
+      transform: scale(1.02);
+    }
+    
+    .product-card.selected {
+      background: var(--primary);
+      color: var(--text-white);
+    }
+    
+    .product-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--bg-white);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 12px;
+    }
+    
+    .product-card.selected .product-icon {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .product-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .product-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    
+    .product-card.selected .product-price {
+      color: var(--text-white);
+    }
+    
+    .product-stock {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+    
+    .product-card.selected .product-stock {
+      color: rgba(255,255,255,0.8);
+    }
+    
+    /* RIGHT SIDE - CART */
+    .cart-section {
+      background: var(--bg-white);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #E5E7EB;
+    }
+    
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+    
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: var(--bg-light);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .cart-item-info {
+      flex: 1;
+    }
+    
+    .cart-item-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    
+    .cart-item-price {
+      font-size: 14px;
+      color: var(--text-medium);
+    }
+    
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-white);
+      border: 2px solid #E5E7EB;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .qty-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .qty-value {
+      font-size: 16px;
+      font-weight: 700;
+      min-width: 32px;
+      text-align: center;
+    }
+    
+    .cart-item-total {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-dark);
+      text-align: right;
+    }
+    
+    .cart-item-delete {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    /* CART SUMMARY */
+    .cart-summary {
+      border-top: 2px solid #E5E7EB;
+      padding-top: 20px;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    
+    .summary-label {
+      color: var(--text-medium);
+    }
+    
+    .summary-value {
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    
+    .summary-total {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      padding-top: 12px;
+      border-top: 2px dashed #E5E7EB;
+      margin-top: 12px;
+    }
+    
+    /* PAYMENT BUTTONS */
+    .payment-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .btn-payment {
+      padding: 20px;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s;
+    }
+    
+    .btn-cash {
+      background: var(--success);
+      color: var(--text-white);
+    }
+    
+    .btn-cash:hover {
+      background: #059669;
+      transform: scale(1.02);
+    }
+    
+    .btn-qris {
+      background: var(--primary);
+      color: var(--text-white);
+    }
+    
+    .btn-qris:hover {
+      background: var(--primary-dark);
+      transform: scale(1.02);
+    }
+    
+    .btn-clear {
+      grid-column: span 2;
+      padding: 14px;
+      background: var(--danger-light);
+      color: var(--danger);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-clear:hover {
+      background: var(--danger);
+      color: var(--text-white);
+    }
+    
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--bg-white);
+      padding: 32px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .modal-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--success-light);
+      color: var(--success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 20px;
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    
+    .modal-amount {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    
+    .modal-btn {
+      padding: 16px 32px;
+      background: var(--primary);
+      color: var(--text-white);
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    
+    /* EMPTY CART */
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+    
+    .empty-cart i {
+      font-size: 60px;
+      margin-bottom: 16px;
+    }
+    
+    .empty-cart p {
+      font-size: 16px;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .products-grid {
+        max-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon">
+        <i class="fas fa-cash-register"></i>
+      </div>
+      <div>
+        <div class="header-title">💰 Kasir - Jual Sparepart</div>
+      </div>
+    </div>
+    
+    <a href="dashboard.html" class="btn-back">
+      <i class="fas fa-arrow-left"></i> Kembali
+    </a>
+  </header>
+  
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+    <!-- PRODUCTS SECTION -->
+    <section class="products-section">
+      <h2 class="section-title">
+        <i class="fas fa-box-open"></i> Pilih Sparepart
+      </h2>
+      
+      <!-- SEARCH -->
+      <div class="search-bar">
+        <input type="text" class="search-input" placeholder="🔍 Cari sparepart..." id="searchInput">
+        <button class="btn-search" onclick="searchProducts()">
+          <i class="fas fa-search"></i> Cari
+        </button>
+      </div>
+      
+      <!-- PRODUCTS GRID -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Product cards will be generated by JS -->
+      </div>
+    </section>
+    
+    <!-- CART SECTION -->
+    <section class="cart-section">
+      <div class="cart-header">
+        <h2 class="section-title" style="margin:0;">
+          <i class="fas fa-shopping-cart"></i> Keranjang
+        </h2>
+        <span id="cartCount" style="background: var(--primary);color:white;padding:4px 12px;border-radius:20px;font-size:14px;font-weight:700;">0</span>
+      </div>
+      
+      <!-- CART ITEMS -->
+      <div class="cart-items" id="cartItems">
+        <div class="empty-cart">
+          <i class="fas fa-cart-shopping"></i>
+          <p>Keranjang kosong</p>
+          <p>Klik produk di samping untuk添加</p>
+        </div>
+      </div>
+      
+      <!-- CART SUMMARY -->
+      <div class="cart-summary" id="cartSummary" style="display: none;">
+        <div class="summary-row">
+          <span class="summary-label">Subtotal</span>
+          <span class="summary-value" id="subtotal">Rp 0</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Pajak (11%)</span>
+          <span class="summary-value" id="tax">Rp 0</span>
+        </div>
+        <div class="summary-row summary-total">
+          <span class="summary-label">TOTAL</span>
+          <span class="summary-value" id="total">Rp 0</span>
+        </div>
+      </div>
+      
+      <!-- PAYMENT BUTTONS -->
+      <div class="payment-buttons" id="paymentButtons" style="display: none;">
+        <button class="btn-payment btn-cash" onclick="showPaymentModal('cash')">
+          <i class="fas fa-money-bill-wave"></i>💵 Cash
+        </button>
+        <button class="btn-payment btn-qris" onclick="showPaymentModal('qris')">
+          <i class="fas fa-qrcode"></i> QRIS
+        </button>
+        <button class="btn-clear" onclick="clearCart()">
+          <i class="fas fa-trash"></i> Kosongkan Keranjang
+        </button>
+      </div>
+    </section>
+  </main>
+  
+  <!-- SUCCESS MODAL -->
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <h2 class="modal-title">🎉 Berhasil!</h2>
+      <div class="modal-amount" id="modalAmount">Rp 0</div>
+      <p style="color:var(--text-medium);margin-bottom:20px;">Pembayaran berhasil dicatat</p>
+      <button class="modal-btn" onclick="closeModal()">Selesai</button>
+    </div>
+  </div>
+  
+  <script>
+    // Sample Products Data
+    const products = [
+      { id: 1, name: 'Oli Mesini 1L', price: 85000, stock: 50 },
+      { id: 2, name: 'Filter Oli', price: 25000, stock: 80 },
+      { id: 3, name: 'Kampas Rem Depan', price: 65000, stock: 30 },
+      { id: 4, name: 'Kampas Rem Belakang', price: 55000, stock: 25 },
+      { id: 5, name: 'Busi', price: 15000, stock: 100 },
+      { id: 6, name: 'Aki Mobil', price: 450000, stock: 10 },
+      { id: 7, name: 'Ban Dalam', price: 85000, stock: 40 },
+      { id: 8, name: 'Rantai', price: 120000, stock: 20 },
+      { id: 9, name: 'Karasling', price: 35000, stock: 60 },
+      { id: 10, name: 'Oli Gardan', price: 95000, stock: 35 },
+      { id: 11, name: 'Filter Udara', price: 30000, stock: 70 },
+      { id: 12, name: 'Fan Belt', price: 45000, stock: 45 },
+      { id: 13, name: 'Wiper Blade', price: 55000, stock: 55 },
+      { id: 14, name: 'Lampu Utama', price: 75000, stock: 40 },
+      { id: 15, name: 'Sekring Set', price: 25000, stock: 90 },
+    ];
+    
+    let cart = [];
+    
+    // Render Products
+    function renderProducts(filter = '') {
+      const grid = document.getElementById('productsGrid');
+      const filtered = products.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()));
+      
+      grid.innerHTML = filtered.map(p => `
+        <div class="product-card" onclick="addToCart(${p.id})">
+          <div class="product-icon">📦</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-price">${formatRupiah(p.price)}</div>
+          <div class="product-stock">Stok: ${p.stock}</div>
+        </div>
+      `).join('');
+    }
+    
+    // Add to Cart
+    function addToCart(productId) {
+      const product = products.find(p => p.id === productId);
+      const existing = cart.find(item => item.id === productId);
+      
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      
+      renderCart();
+    }
+    
+    // Render Cart
+    function renderCart() {
+      const cartItems = document.getElementById('cartItems');
+      const cartCount = document.getElementById('cartCount');
+      const cartSummary = document.getElementById('cartSummary');
+      const paymentButtons = document.getElementById('paymentButtons');
+      
+      cartCount.textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+      
+      if (cart.length === 0) {
+        cartItems.innerHTML = `
+          <div class="empty-cart">
+            <i class="fas fa-cart-shopping"></i>
+            <p>Keranjang kosong</p>
+            <p>Klik produk di samping untuk添加</p>
+          </div>
+        `;
+        cartSummary.style.display = 'none';
+        paymentButtons.style.display = 'none';
+        return;
+      }
+      
+      cartItems.innerHTML = cart.map((item, index) => `
+        <div class="cart-item">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${formatRupiah(item.price)}</div>
+          </div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+            <span class="qty-value">${item.qty}</span>
+            <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+          </div>
+          <div class="cart-item-total">${formatRupiah(item.price * item.qty)}</div>
+          <button class="cart-item-delete" onclick="removeFromCart(${index})">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `).join('');
+      
+      // Calculate totals
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const tax = Math.round(subtotal * 0.11);
+      const total = subtotal + tax;
+      
+      document.getElementById('subtotal').textContent = formatRupiah(subtotal);
+      document.getElementById('tax').textContent = formatRupiah(tax);
+      document.getElementById('total').textContent = formatRupiah(total);
+      document.getElementById('modalAmount').textContent = formatRupiah(total);
+      
+      cartSummary.style.display = 'block';
+      paymentButtons.style.display = 'grid';
+    }
+    
+    // Update Quantity
+    function updateQty(index, delta) {
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      renderCart();
+    }
+    
+    // Remove from Cart
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+    
+    // Clear Cart
+    function clearCart() {
+      if (confirm('Apakah Anda yakin ingin mengosongkan keranjang?')) {
+        cart = [];
+        renderCart();
+      }
+    }
+    
+    // Search Products
+    function searchProducts() {
+      const query = document.getElementById('searchInput').value;
+      renderProducts(query);
+    }
+    
+    // Show Payment Modal
+    function showPaymentModal(method) {
+      if (cart.length === 0) {
+        alert('Keranjang masih kosong!');
+        return;
+      }
+      document.getElementById('successModal').classList.add('show');
+    }
+    
+    // Close Modal
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('show');
+      cart = [];
+      renderCart();
+      window.location.href = 'dashboard.html';
+    }
+    
+    // Format Rupiah
+    function formatRupiah(amount) {
+      return 'Rp ' + amount.toLocaleString('id-ID');
+    }
+    
+    // Initial Render
+    renderProducts();
+  </script>
+</body>
+</html>

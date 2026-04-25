@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sparepart - Bengkel Maju Jaya</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #2563EB;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: #7C3AED;
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .header-title { font-size: 18px; font-weight: 700; }
+    .btn-back { background: rgba(255,255,255,0.2); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .btn-add { background: var(--success); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    
+    .main-container { padding: 24px; max-width: 1200px; margin: 0 auto; }
+    
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-white); padding: 20px; border-radius: 14px; box-shadow: var(--shadow); }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--text-dark); }
+    .stat-label { font-size: 13px; color: var(--text-medium); }
+    
+    .content-card { background: var(--bg-white); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .card-title { font-size: 18px; font-weight: 700; color: var(--text-dark); }
+    
+    .search-row { display: flex; gap: 12px; margin-bottom: 20px; }
+    .search-input { flex: 1; padding: 12px 16px; border: 2px solid #E5E7EB; border-radius: 10px; font-size: 15px; }
+    .btn-search { background: var(--primary); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px; background: var(--bg-light); font-size: 13px; font-weight: 700; color: var(--text-medium); }
+    td { padding: 14px 12px; border-bottom: 1px solid #E5E7EB; font-size: 14px; }
+    .stock-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .stock-ok { background: #D1FAE5; color: #059669; }
+    .stock-low { background: #FEF3C7; color: #D97706; }
+    .stock-out { background: #FEE2E2; color: #DC2626; }
+    .action-btn { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; margin-right: 6px; }
+    .btn-edit { background: #DBEAFE; color: #2563EB; }
+    .btn-delete { background: #FEE2E2; color: #DC2626; }
+    
+    @media (max-width: 800px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon"><i class="fas fa-box-open"></i></div>
+      <div><div class="header-title">📦 Kelola Sparepart</div></div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <a href="dashboard.html" class="btn-back"><i class="fas fa-home"></i> Dashboard</a>
+    </div>
+  </header>
+  
+  <main class="main-container">
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">156</div>
+        <div class="stat-label">Jenis Sparepart</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">2.450</div>
+        <div class="stat-label">Total Stok</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--warning);">3</div>
+        <div class="stat-label">Stok Menipis</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--danger);">12</div>
+        <div class="stat-label">Stok Habis</div>
+      </div>
+    </div>
+    
+    <!-- PRODUCTS TABLE -->
+    <div class="content-card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-list"></i> Daftar Sparepart</h2>
+        <button class="btn-add" onclick="alert('Fitur tambah produkcoming soon!')">
+          <i class="fas fa-plus"></i> Tambah
+        </button>
+      </div>
+      
+      <div class="search-row">
+        <input type="text" class="search-input" placeholder="🔍 Cari sparepart...">
+        <button class="btn-search"><i class="fas fa-search"></i> Cari</button>
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama Sparepart</th>
+            <th>Kategori</th>
+            <th>Harga Jual</th>
+            <th>Harga Beli</th>
+            <th>Stok</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="productTable">
+          <tr>
+            <td>1</td>
+            <td>Oli Mesini 1L Shell</td>
+            <td>Oli</td>
+            <td>Rp 85.000</td>
+            <td>Rp 65.000</td>
+            <td>50</td>
+            <td><span class="stock-badge stock-ok">Ada</span></td>
+            <td>
+              <button class="action-btn btn-edit">Edit</button>
+              <button class="action-btn btn-delete">Hapus</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Filter Oli</td>
+            <td>Filter</td>
+            <td>Rp 25.000</td>
+            <td>Rp 18.000</td>
+            <td>80</td>
+            <td><span class="stock-badge stock-ok">Ada</span></td>
+            <td>
+              <button class="action-btn btn-edit">Edit</button>
+              <button class="action-btn btn-delete">Hapus</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Kampas Rem Depan</td>
+            <td>Rem</td>
+            <td>Rp 65.000</td>
+            <td>Rp 45.000</td>
+            <td>30</td>
+            <td><span class="stock-badge stock-ok">Ada</span></td>
+            <td>
+              <button class="action-btn btn-edit">Edit</button>
+              <button class="action-btn btn-delete">Hapus</button>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Busi</td>
+            <td>Kelistrikan</td>
+            <td>Rp 15.000</td>
+            <td>Rp 8.000</td>
+            <td>100</td>
+            <td><span class="stock-badge stock-ok">Ada</span></td>
+            <td>
+              <button class="action-btn btn-edit">Edit</button>
+              <button class="action-btn btn-delete">Hapus</button>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Kampas Rem Belakang</td>
+            <td>Rem</td>
+            <td>Rp 55.000</td>
+            <td>Rp 38.000</td>
+            <td style="color:red;font-weight:700;">2</td>
+            <td><span class="stock-badge stock-low">Tipis</span></td>
+            <td>
+              <button class="action-btn btn-edit">Edit</button>
+              <button class="action-btn btn-delete">Hapus</button>
+            </td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Aki Mobil</td>
+            <td>Aki</td>
+            <td>Rp 450.000</td>
+            <td>Rp 380.000</td>
+            <td style="color:red;font-weight:700;">0</td>
+            <td><span class="stock-badge stock-out">Habis</span></td>
+            <td>
+              <button class="action-btn btn-edit">Edit</button>
+              <button class="action-btn btn-delete">Hapus</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelanggan & Mobil - Bengkel Maju Jaya</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #DB2777;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --info: #06B6D4;
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    /* HEADER */
+    .header {
+      background: var(--primary);
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .header-title { font-size: 18px; font-weight: 700; }
+    .btn-back { background: rgba(255,255,255,0.2); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .btn-add { background: var(--success); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    
+    .main-container { padding: 24px; max-width: 1200px; margin: 0 auto; }
+    
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-white); padding: 20px; border-radius: 14px; box-shadow: var(--shadow); }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--primary); }
+    .stat-label { font-size: 13px; color: var(--text-medium); }
+    
+    /* CONTENT CARD */
+    .content-card { background: var(--bg-white); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .card-title { font-size: 18px; font-weight: 700; color: var(--text-dark); }
+    
+    /* SEARCH */
+    .search-row { display: flex; gap: 12px; margin-bottom: 20px; }
+    .search-input { flex: 1; padding: 12px 16px; border: 2px solid #E5E7EB; border-radius: 10px; font-size: 15px; }
+    .btn-search { background: var(--primary); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px; background: var(--bg-light); font-size: 13px; font-weight: 700; color: var(--text-medium); }
+    td { padding: 14px 12px; border-bottom: 1px solid #E5E7EB; font-size: 14px; }
+    .vehicle-plate { font-weight: 700; color: var(--primary); font-size: 16px; }
+    .customer-name { font-weight: 600; }
+    .customer-phone { color: var(--text-medium); }
+    .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .status-active { background: #D1FAE5; color: #059669; }
+    .status-waiting { background: #FEF3C7; color: #D97706; }
+    .action-btn { padding: 6px 12px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; margin-right: 4px; }
+    .btn-view { background: #DBEAFE; color: #2563EB; }
+    .btn-edit { background: #FEF3C7; color: #D97706; }
+    .btn-delete { background: #FEE2E2; color: #DC2626; }
+    
+    /* TABS */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab { padding: 10px 20px; background: var(--bg-light); border: none; border-radius: 10px; font-weight: 600; cursor: pointer; color: var(--text-medium); }
+    .tab.active { background: var(--primary); color: var(--text-white); }
+    .tab:hover:not(.active) { background: #E5E7EB; }
+    
+    @media (max-width: 800px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon"><i class="fas fa-users"></i></div>
+      <div><div class="header-title">👥 Pelanggan & Mobil</div></div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <a href="dashboard.html" class="btn-back"><i class="fas fa-home"></i> Dashboard</a>
+      <button class="btn-add" onclick="alert('Fitur tambah pelanggancoming soon!')">
+        <i class="fas fa-plus"></i> Tambah Pelanggan
+      </button>
+    </div>
+  </header>
+  
+  <main class="main-container">
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">248</div>
+        <div class="stat-label">Total Pelanggan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">312</div>
+        <div class="stat-label">Total Mobil</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Mobil di Service</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">156</div>
+        <div class="stat-label">Service Berulang</div>
+      </div>
+    </div>
+    
+    <!-- PELANGGAN & MOBIL -->
+    <div class="content-card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-car"></i> Daftar Mobil & Pelanggan</h2>
+      </div>
+      
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active">Semua Mobil</button>
+        <button class="tab">Sedang di Service</button>
+        <button class="tab">Siap Diambil</button>
+        <button class="tab">Service Berulang</button>
+      </div>
+      
+      <!-- SEARCH -->
+      <div class="search-row">
+        <input type="text" class="search-input" placeholder="🔍 Cari plat nomordan nama pelanggan...">
+        <button class="btn-search"><i class="fas fa-search"></i> Cari</button>
+      </div>
+      
+      <!-- TABLE -->
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Plat Nomor</th>
+            <th>Mobil</th>
+            <th>Tahun</th>
+            <th>Pelanggan</th>
+            <th>Telepon</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="vehicle-plate">B 1234 ABC</td>
+            <td>Toyota Innova</td>
+            <td>2020</td>
+            <td class="customer-name">Budi Santoso</td>
+            <td class="customer-phone">0812 3456 7890</td>
+            <td><span class="status-badge status-active">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-view">Lihat</button>
+              <button class="action-btn btn-edit">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="vehicle-plate">D 5678 FG</td>
+            <td>Honda Jazz</td>
+            <td>2019</td>
+            <td class="customer-name">Siti Rahayu</td>
+            <td class="customer-phone">0813 9876 5432</td>
+            <td><span class="status-badge status-waiting">Di Service</span></td>
+            <td>
+              <button class="action-btn btn-view">Lihat</button>
+              <button class="action-btn btn-edit">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="vehicle-plate">B 9012 JK</td>
+            <td>Mitsubishi Xpander</td>
+            <td>2021</td>
+            <td class="customer-name">Ahmad Wijaya</td>
+            <td class="customer-phone">0821 1122 3344</td>
+            <td><span class="status-badge status-active">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-view">Lihat</button>
+              <button class="action-btn btn-edit">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="vehicle-plate">F 3456 LM</td>
+            <td>Suzuki Ertiga</td>
+            <td>2018</td>
+            <td class="customer-name">Dewi Lestari</td>
+            <td class="customer-phone">0856 7788 9900</td>
+            <td><span class="status-badge status-waiting">Siap Diambil</span></td>
+            <td>
+              <button class="action-btn btn-view">Lihat</button>
+              <button class="action-btn btn-edit">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="vehicle-plate">B 7890 QR</td>
+            <td>Nissan Livina</td>
+            <td>2022</td>
+            <td class="customer-name">Permana</td>
+            <td class="customer-phone">0811 2233 4455</td>
+            <td><span class="status-badge status-active">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-view">Lihat</button>
+              <button class="action-btn btn-edit">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="vehicle-plate">G 1112 TU</td>
+            <td>Daihatsu Sigra</td>
+            <td>2020</td>
+            <td class="customer-name">Rina Mustika</td>
+            <td class="customer-phone">0878 9900 1122</td>
+            <td><span class="status-badge status-active">Aktif</span></td>
+            <td>
+              <button class="action-btn btn-view">Lihat</button>
+              <button class="action-btn btn-edit">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- HISTORY -->
+    <div class="content-card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-history"></i> Riwayat Service Terakhir</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Plat</th>
+            <th>Service</th>
+            <th>Montir</th>
+            <th>Biaya</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>20 Apr 2026</td>
+            <td class="vehicle-plate">B 1234 ABC</td>
+            <td>Ganti Oli + Tune Up</td>
+            <td>Pak Budi</td>
+            <td>Rp 235.000</td>
+            <td><span class="status-badge status-active">Selesai</span></td>
+          </tr>
+          <tr>
+            <td>15 Mar 2026</td>
+            <td class="vehicle-plate">D 5678 FG</td>
+            <td>Cuci Mobil</td>
+            <td>Pak Agus</td>
+            <td>Rp 75.000</td>
+            <td><span class="status-badge status-active">Selesai</span></td>
+          </tr>
+          <tr>
+            <td>10 Feb 2026</td>
+            <td class="vehicle-plate">B 9012 JK</td>
+            <td>Ganti Kampas Rem</td>
+            <td>Pak Budi</td>
+            <td>Rp 130.000</td>
+            <td><span class="status-badge status-active">Selesai</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

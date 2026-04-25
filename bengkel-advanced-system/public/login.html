@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Bengkel Maju Jaya</title>
+  
+  <!-- Fonts - Menggunakan font yang mudah dibaca -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    /* RESET & BASE */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      /* Warna Utama - Biru yang Menenangkan */
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --primary-light: #DBEAFE;
+      
+      /* Warna Pendukung - Hijau untuk sukses */
+      --success: #10B981;
+      --success-light: #D1FAE5;
+      
+      /* Warna Peringatan - Orange */
+      --warning: #F59E0B;
+      
+      /* Warna Danger - Merah */
+      --danger: #EF4444;
+      
+      /* Abu-abu untuk teks */
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      
+      /* Background */
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      
+      /* Shadow */
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #DBEAFE 0%, #E0E7FF 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    /* LOGIN CARD */
+    .login-container {
+      background: var(--bg-white);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+    
+    /* LOGO & TITLE */
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: var(--primary);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 36px;
+      color: var(--text-white);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+    
+    .brand-name {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    
+    .welcome-text {
+      color: var(--text-medium);
+      font-size: 16px;
+      margin-bottom: 32px;
+    }
+    
+    /* FORM */
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 18px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 16px 16px 16px 48px;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: var(--bg-light);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: var(--bg-white);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+    
+    .form-input::placeholder {
+      color: var(--text-light);
+    }
+    
+    /* BUTTON */
+    .btn-login {
+      width: 100%;
+      padding: 18px;
+      background: var(--primary);
+      color: var(--text-white);
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+    
+    .btn-login:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+    
+    .btn-login:active {
+      transform: translateY(0);
+    }
+    
+    /* FORGOT PASSWORD */
+    .forgot-link {
+      display: block;
+      margin-top: 20px;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* ERROR MESSAGE */
+    .error-message {
+      background: #FEE2E2;
+      color: #DC2626;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+    
+    /* FOOTER HINT */
+    .login-hint {
+      margin-top: 32px;
+      padding: 16px;
+      background: var(--primary-light);
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--text-medium);
+    }
+    
+    .login-hint strong {
+      color: var(--primary);
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 32px 24px;
+      }
+      
+      .brand-name {
+        font-size: 24px;
+      }
+      
+      .form-input {
+        padding: 14px 14px 14px 44px;
+        font-size: 16px;
+      }
+      
+      .btn-login {
+        padding: 16px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Logo -->
+    <div class="logo">
+      <i class="fas fa-wrench"></i>
+    </div>
+    
+    <!-- Nama Bengkel -->
+    <h1 class="brand-name">Bengkel Maju Jaya</h1>
+    <p class="welcome-text">Sistem Manajemen Bengkel</p>
+    
+    <!-- Error Message -->
+    <div id="errorMessage" class="error-message">
+      <i class="fas fa-exclamation-circle"></i>
+      <span id="errorText">Email atau password salah!</span>
+    </div>
+    
+    <!-- Login Form -->
+    <form id="loginForm">
+      <!-- Email -->
+      <div class="form-group">
+        <label class="form-label">📧 Email</label>
+        <div class="input-group">
+          <i class="fas fa-envelope input-icon"></i>
+          <input 
+            type="email" 
+            id="email"
+            class="form-input" 
+            placeholder="Contoh: adi@bengkel.com"
+            required
+          >
+        </div>
+      </div>
+      
+      <!-- Password -->
+      <div class="form-group">
+        <label class="form-label">🔑 Password</label>
+        <div class="input-group">
+          <i class="fas fa-lock input-icon"></i>
+          <input 
+            type="password" 
+            id="password"
+            class="form-input" 
+            placeholder="Masukkan password"
+            required
+          >
+        </div>
+      </div>
+      
+      <!-- Tombol Login -->
+      <button type="submit" class="btn-login">
+        <i class="fas fa-sign-in-alt"></i> Masuk
+      </button>
+      
+      <!-- Lupa Password -->
+      <a href="#" class="forgot-link">Lupa password?</a>
+    </form>
+    
+    <!-- Hint untuk user baru -->
+    <div class="login-hint">
+      <i class="fas fa-info-circle"></i>
+      <strong>Hint:</strong> Hubungi administrator untuk mendapatkan akses login
+    </div>
+  </div>
+  
+  <script>
+    // Simple login simulation
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Demo credentials - dalam aplikasi nyata, ini akan diganti dengan API call
+      if (email && password) {
+        // Simpan info login ke localStorage
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        // Redirect ke dashboard
+        window.location.href = 'dashboard.html';
+      } else {
+        // Tampilkan error
+        document.getElementById('errorMessage').classList.add('show');
+      }
+    });
+    
+    // Cek jika sudah login
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

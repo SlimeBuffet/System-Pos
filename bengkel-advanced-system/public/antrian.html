@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antrian Service - Bengkel Maju Jaya</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #EA580C;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --info: #06B6D4;
+      --text-dark: #1F2937;
+      --text-medium: #4B5563;
+      --text-light: #9CA3AF;
+      --text-white: #FFFFFF;
+      --bg-light: #F3F4F6;
+      --bg-white: #FFFFFF;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg-light);
+      min-height: 100vh;
+    }
+    
+    .header {
+      background: var(--primary);
+      color: var(--text-white);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .header-title { font-size: 18px; font-weight: 700; }
+    .btn-back { background: rgba(255,255,255,0.2); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .btn-add { background: var(--success); color: var(--text-white); border: none; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    
+    .main-container { padding: 24px; max-width: 1400px; margin: 0 auto; }
+    
+    /* KANBAN BOARD */
+    .kanban-title { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-bottom: 16px; }
+    .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    
+    .kanban-column {
+      background: var(--bg-white);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      min-height: 500px;
+    }
+    
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid;
+    }
+    
+    .column-title {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .column-count {
+      background: var(--bg-light);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    
+    .col-masuk { border-color: #3B82F6; }
+    .col-masuk .column-title { color: #3B82F6; }
+    .col-proses { border-color: #F59E0B; }
+    .col-proses .column-title { color: #F59E0B; }
+    .col-selesai { border-color: #10B981; }
+    .col-selesai .column-title { color: #10B981; }
+    .col-jadi { border-color: #8B5CF6; }
+    .col-jadi .column-title { color: #8B5CF6; }
+    
+    /* SERVICE CARD */
+    .service-card {
+      background: var(--bg-light);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .card-plate {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    
+    .card-customer {
+      font-size: 13px;
+      color: var(--text-medium);
+      margin-bottom: 8px;
+    }
+    
+    .card-services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    
+    .service-tag {
+      background: var(--bg-white);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-medium);
+    }
+    
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+    
+    .montir-badge {
+      background: #E0E7FF;
+      color: #4F46E5;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    
+    .time-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* ACTION BUTTONS */
+    .card-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    
+    .action-btn {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+    
+    .btn-move { background: var(--primary); color: var(--text-white); }
+    .btn-detail { background: var(--bg-white); color: var(--text-medium); border: 1px solid #E5E7EB; }
+    .btn-complete { background: var(--success); color: var(--text-white); }
+    .btn-wa { background: #25D366; color: var(--text-white); }
+    
+    /* SUMMARY CARDS */
+    .summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .summary-card { background: var(--bg-white); padding: 20px; border-radius: 14px; box-shadow: var(--shadow); text-align: center; }
+    .summary-value { font-size: 32px; font-weight: 800; }
+    .summary-label { font-size: 14px; color: var(--text-medium); }
+    
+    @media (max-width: 1000px) {
+      .kanban-board { grid-template-columns: repeat(2, 1fr); }
+      .summary-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 600px) {
+      .kanban-board { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon"><i class="fas fa-list-ol"></i></div>
+      <div><div class="header-title">📋 Antrian service</div></div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <a href="dashboard.html" class="btn-back"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="service.html" class="btn-add"><i class="fas fa-plus"></i> service Baru</a>
+    </div>
+  </header>
+  
+  <main class="main-container">
+    <!-- SUMMARY -->
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="summary-value" style="color:#3B82F6;">8</div>
+        <div class="summary-label">Menunggu</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-value" style="color:#F59E0B;">4</div>
+        <div class="summary-label">Sedang Dikerjakan</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-value" style="color:#10B981;">6</div>
+        <div class="summary-label">Selesai Hari Ini</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-value" style="color:#8B5CF6;">3</div>
+        <div class="summary-label">Siap Diambil</div>
+      </div>
+    </div>
+    
+    <h1 class="kanban-title">📋 Pantau service Mobil</h1>
+    
+    <!-- KANBAN BOARD -->
+    <div class="kanban-board">
+      <!-- KOLOM 1: MASUK -->
+      <div class="kanban-column col-masuk">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="fas fa-sign-in-alt"></i> Masuk
+          </div>
+          <span class="column-count">3</span>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">B 1234 ABC</div>
+          <div class="card-customer">Budi Santoso</div>
+          <div class="card-services">
+            <span class="service-tag">Ganti Oli</span>
+            <span class="service-tag">Tune Up</span>
+          </div>
+          <div class="card-footer">
+            <span class="montir-badge">Pak Budi</span>
+            <span class="time-badge"><i class="fas fa-clock"></i> 30 menit</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-detail">Detail</button>
+            <button class="action-btn btn-move">Kerjakan →</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">D 5678 FG</div>
+          <div class="card-customer">Siti Rahayu</div>
+          <div class="card-services">
+            <span class="service-tag">Cuci Mobil</span>
+          </div>
+          <div class="card-footer">
+            <span class="montir-badge">Pak Agus</span>
+            <span class="time-badge"><i class="fas fa-clock"></i> 45 menit</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-detail">Detail</button>
+            <button class="action-btn btn-move">Kerjakan →</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">B 9012 JK</div>
+          <div class="card-customer">Ahmad Wijaya</div>
+          <div class="card-services">
+            <span class="service-tag">Ganti Kampas</span>
+            <span class="service-tag">Service AC</span>
+          </div>
+          <div class="card-footer">
+            <span class="montir-badge">Pak Rudi</span>
+            <span class="time-badge"><i class="fas fa-clock"></i> 90 menit</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-detail">Detail</button>
+            <button class="action-btn btn-move">Kerjakan →</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- KOLOM 2: SEDANG PROSES -->
+      <div class="kanban-column col-proses">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="fas fa-cog"></i> Proses
+          </div>
+          <span class="column-count">2</span>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">F 3456 LM</div>
+          <div class="card-customer">Dewi Lestari</div>
+          <div class="card-services">
+            <span class="service-tag">Ganti Oli Gardan</span>
+          </div>
+          <div class="card-footer">
+            <span class="montir-badge">Pak Budi</span>
+            <span class="time-badge"><i class="fas fa-clock"></i> 20 menit</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-detail">Detail</button>
+            <button class="action-btn btn-complete">Selesai ✓</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">G 1112 TU</div>
+          <div class="card-customer">Rina Mustika</div>
+          <div class="card-services">
+            <span class="service-tag">Tune Up</span>
+            <span class="service-tag">Ganti Busi</span>
+          </div>
+          <div class="card-footer">
+            <span class="montir-badge">Pak Rudi</span>
+            <span class="time-badge"><i class="fas fa-clock"></i> 40 menit</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-detail">Detail</button>
+            <button class="action-btn btn-complete">Selesai ✓</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- KOLOM 3: SELESAI -->
+      <div class="kanban-column col-selesai">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="fas fa-check-circle"></i> Selesai
+          </div>
+          <span class="column-count">3</span>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">B 7890 QR</div>
+          <div class="card-customer">Permana</div>
+          <div class="card-services">
+            <span class="service-tag">Ganti Oli</span>
+          </div>
+          <div class="card-footer">
+            <span class="montir-badge">Pak Agus</span>
+            <span class="time-badge"><i class="fas fa-check"></i> 25 menit</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-wa">📱 Notif WA</button>
+            <button class="action-btn btn-move">Siap Ambil →</button>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">L 2223 VW</div>
+          <div class="card-customer">Joko Prasetyo</div>
+          <div class="card-services">
+            <span class="service-tag">Cuci Mobil</span>
+          </div>
+          <div class="card-footer">
+            <span class="montir-badge">Pak Budi</span>
+            <span class="time-badge"><i class="fas fa-check"></i> 35 menit</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-wa">📱 Notif WA</button>
+            <button class="action-btn btn-move">Siap Ambil →</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- KOLOM 4: SIAP DIAMBIL -->
+      <div class="kanban-column col-jadi">
+        <div class="column-header">
+          <div class="column-title">
+            <i class="fas fa-box"></i> Siap Diambil
+          </div>
+          <span class="column-count">2</span>
+        </div>
+        
+        <div class="service-card">
+          <div class="card-plate">B 4567 MN</div>
+          <div class="card-customer">Hendra Gunawan</div>
+          <div class="card-services">
+            <span class="service-tag">Ganti Filter</span>
+            <span class="service-tag">Tune Up</span>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight:700;color:var(--success);">Rp 280.000</span>
+            <span class="time-badge">Siap!</span>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn btn-detail">Print Nota</button>
+            <button class="action-btn btn-move">Ambil →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
