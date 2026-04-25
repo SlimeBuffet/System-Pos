@@ -1,5 +1,5 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+require('dotenv').config();
 
 module.exports = {
   // Server Configuration
@@ -12,7 +12,7 @@ module.exports = {
     port: parseInt(process.env.DB_PORT) || 5432,
     name: process.env.DB_NAME || 'bengkel_pos',
     user: process.env.DB_USER || 'postgres',
-    password: String(process.env.DB_PASSWORD) || '',
+    password: process.env.DB_PASSWORD || '',
     dialect: 'postgres',
     pool: {
       max: 10,
